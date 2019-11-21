@@ -29,14 +29,32 @@ def get_all_podcasts(url_podcast, file_name_podcast ):
 
 
 def list_day_podcasts():
-    """Список подкастов на главной"""
+    """Вывод списка подкастов на главной"""
     get_content = soup.find('div', {'id': 'content'})
+    number_list = 1
     for div in get_content.find_all('h1'):
         headers = div.find_all('a')[0].text
-        # description = div.find('a').text
-        # text_discription.append(discription[1].text)   #Описание подкаста идет вторым тегом <p
-        print(headers)
+        # print(headers)
+        match = re.findall('Episode | episode', headers)
+        try:
+            headers_menu = []
+            if match[0] == 'Episode' or 'episode':
+                headers_menu.append(headers)
+                print(str(number_list) + " " + headers_menu[0])
+                number_list += 1
+        except IndexError:
+            pass
 
+
+def menu_podcast_of_day():
+    """Подкасты дня для выбора парсинга файла подкаста"""
+    number_list = 1
+    global pod_dict
+    pod_dict = {}
+    for el in file_name_podcast:
+        # print("[" + str(number_list) + "] ", el[0:12])
+        pod_dict[number_list] = el
+        number_list += 1
 
 def file_name (name_dict):
     name_url = name_dict.values()
@@ -48,7 +66,7 @@ def file_name (name_dict):
 
 def lst_dir():
     """Получим файлы страниц подкастов на диске, чтобы не качать повторно"""
-    on_hdd = os.listdir(".") #В коченчном варианте поправить путь до текущей директории.
+    on_hdd = os.listdir("/home/taomao/PycharmProjects/dev_zen/") #В коченчном варианте поправить путь до текущей директории.
     return on_hdd
 
 
@@ -72,7 +90,7 @@ def file_name_mp3 (podcast_link):
 
 
 def get_mp3_podcasts(url_podcast, file_name_mp3):
-    """Скачиваем файл подкаса"""
+    """Скачиваем файл подкаста"""
     print("Качаем подкаст, подождите...")
     try:
         r = requests.get(url_podcast, stream=True)
@@ -123,10 +141,11 @@ def theme_choise():
     while flag == True:
         try:
             choise = str(input("Нажмите цифру для выбора темы или [a]ll для прослушивания всего подкаста: "))
-
+            flag = False
         except Exception:
             print("Ошибка - похоже вы ввели не тот символ.")
             continue
+
         choise_list = ["A", "a", "а", "А", "All", "all", "b"]
         if any(choise in s for s in choise_list):
             start_time = "00:00:00"
@@ -134,7 +153,6 @@ def theme_choise():
             choise = int(choise)
             choise -= 1
             start_time = timing_list[choise]
-        flag = False
     print(start_time)
     os.system('mplayer -ss "{}" {}'.format(start_time, file_name_on_disk))
 
@@ -185,12 +203,10 @@ for el in file_name_podcast:
 list_day_podcasts()
 
 print("\n")
-number_list = 1
-pod_dict = {}
-for el in file_name_podcast:
-    print("[" + str(number_list) + "] ", el[0:12])
-    pod_dict[number_list] = el
-    number_list += 1
+
+menu_podcast_of_day()
+
+
 
 episode = int(input("\nВаш выбор: "))
 choise_epis = pod_dict.get(episode)
@@ -217,7 +233,6 @@ page_var2 = page.read()
 podcast_link1 = get_mp3_from_page()
 print("____" * 30)
 file_name_on_disk = file_name_mp3(podcast_link1)
-print(on_hdd)
 if any(file_name_on_disk in s for s in on_hdd):
     theme_choise()
 else:
