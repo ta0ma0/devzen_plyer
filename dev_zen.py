@@ -66,7 +66,7 @@ def file_name (name_dict):
 
 def lst_dir():
     """Получим файлы страниц подкастов на диске, чтобы не качать повторно"""
-    on_hdd = os.listdir("/home/taomao/PycharmProjects/dev_zen/") #В коченчном варианте поправить путь до текущей директории.
+    on_hdd = os.listdir(".") #В коченчном варианте поправить путь до текущей директории.
     return on_hdd
 
 
