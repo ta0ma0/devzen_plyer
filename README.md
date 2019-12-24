@@ -11,6 +11,6 @@
 Для работы требует VLC.
 Список зависимостей от модулей Python в файле requirements.txt
 
-#Установка
+###### Установка
 pip3 install -r requirements.txt
 
