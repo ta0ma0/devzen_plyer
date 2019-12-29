@@ -56,7 +56,7 @@ def menu_podcast_of_day():
 
 def file_name (name_dict):
     name_url = name_dict.values()
-    print(name_url)
+#    print(name_url)
     for item in name_url:
         item = str(item)
         file_name_list.append(item.split('/')[3] + '.html')
