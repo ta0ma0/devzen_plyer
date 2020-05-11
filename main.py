@@ -73,7 +73,7 @@ class Menu(object):
                     podcast_link = get_mp3_from_page(page_var)
                     page_var.close()
                     stdscreen = curses.newwin(150, 400)
-                    self.window.addstr(40, 1, podcast_link)
+                    #self.window.addstr(40, 1, podcast_link)
                     submenu = SubMenu(sub_menu_items, stdscreen) #Вывел конкретный подкаст, нужно изменить на выбор подкастов.
 
                     submenu.display_sub()
